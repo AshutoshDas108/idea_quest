@@ -32,6 +32,7 @@ This guide will help you set up the Fraud Detection System on your local machine
      ```sh
      cd fdm_server
      ```
+     - Before running the above command make sure that inside the pom.xml chnage the image name to <your_docker_user_name>/spring_boot_app
 
 5. **Build Docker Image**
    - Run the following Maven command to build the Docker image:
