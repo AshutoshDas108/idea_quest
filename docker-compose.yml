@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  rpi_emulator:
+    build:
+      context: ./ML_Model
+      dockerfile: ../Dockerfile
+    container_name: rpi_emulator
+    ports:
+      - "5001:5001"
+    networks:
+      - mynetwork
+
+  flask_app:
+    build:
+      context: ./ML_Model
+      dockerfile: ../Dockerfile.Flask
+    container_name: flask_app
+    ports:
+      - "5000:5000"
+    networks:
+      - mynetwork
+    depends_on:
+      - rpi_emulator
+
+  spring_boot_app:
+    # build:
+    #   context: ./fdm_server
+    #   dockerfile: ../Dockerfile.spring
+    image: ashutoshdas108/idea_quest-spring_boot_app:latest
+    container_name: spring_boot_app
+    ports:
+      - "8081:8080"
+    networks:
+      - mynetwork
+    depends_on:
+      - flask_app
+
+networks:
+  mynetwork:
+    driver: bridge

@@ -1,0 +1,24 @@
+# Use an official OpenJDK runtime as a parent image
+ FROM openjdk:11-jre-slim
+
+# # Set the working directory in the container
+# WORKDIR /app
+
+# # Copy the Maven wrapper scripts and application code
+# COPY mvnw mvnw
+# COPY mvnw.cmd mvnw.cmd
+# COPY .mvn .mvn
+# COPY pom.xml pom.xml
+# COPY src src
+
+# # Make the mvnw script executable
+# RUN chmod +x mvnw
+
+# # Package the Spring Boot app
+# RUN ./mvnw package
+
+# # Make port 8080 available to the world outside this container
+# EXPOSE 8080
+
+# # Run the Spring Boot app when the container launches
+# CMD ["java", "-jar", "target/demo-0.0.1-SNAPSHOT.jar"]
