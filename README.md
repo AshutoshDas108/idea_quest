@@ -71,7 +71,7 @@ This guide will help you set up the Fraud Detection System on your local machine
      npm run dev
      ```
 
-Your Fraud Detection System should now be up and running! Access the frontend at `http://localhost:3000` and ensure that the backend services are properly communicating.
+Your Fraud Detection System should now be up and running! Access the frontend at `http://localhost:5173` and ensure that the backend services are properly communicating.
 
 ## Troubleshooting
 
