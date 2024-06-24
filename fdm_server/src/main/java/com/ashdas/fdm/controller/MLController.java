@@ -15,7 +15,7 @@ import org.springframework.http.MediaType;
 public class MLController {
 
     // Update the URL to use the Docker service name for Flask app
-    private static final String FLASK_APP_URL = "http://127.0.0.1:5000/api/predict";
+    private static final String FLASK_APP_URL = "http://flask_app:5000/api/predict";
 
 
     @PostMapping("/predict")

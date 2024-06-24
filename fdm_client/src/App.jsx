@@ -16,7 +16,7 @@ function App() {
       newBalance: parseFloat(newBalance)
     };
 
-    const url = "http://localhost:8080/api/predict"; // Update the port if necessary
+    const url = "http://localhost:8081/api/predict"; // Update the port if necessary
 
     try {
       const response = await axios.post(url, data);
