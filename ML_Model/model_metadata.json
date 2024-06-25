@@ -1,0 +1,1 @@
+{"encoder_path": "encoder.pkl", "scaler_path": "scaler.pkl", "categorical_features": ["hour_transaction", "category", "city", "state"]}

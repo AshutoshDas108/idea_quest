@@ -1,6 +1,7 @@
 package com.ashdas.fdm.dto;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -10,7 +11,12 @@ import lombok.*;
 public class InputDataDTO {
 
     private Float amount;
-    private Float oldBalance;
-    private Float newBalance;
+    private String merchant;
+    private Integer age;
+    private String city;
+    private String state;
+    private  Float lat;
+    private  Float longi;
+    private Integer hour;
 
 }
