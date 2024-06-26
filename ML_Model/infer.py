@@ -12,6 +12,7 @@ from flask import Flask, request, jsonify
 import pickle
 import logging
 
+
 logger = logging.getLogger(__name__)
 
 # amount, merchant, dob, city, state, lat, long
@@ -43,19 +44,28 @@ def get_tod(hour):
 
 
 def preprocess(data,encoder,scaler,CATEGORICAL_FEATURES):
+    logger.error('preprocessing')
+    
     with open('merchant_to_category.json', 'r') as json_file:
         merchant_to_category = json.load(json_file)
     merchant_category = merchant_to_category[data["merchant"]]
+    
+    logger.error('merchant_to_category done')
 
     with open('city_to_city_pop.json', 'r') as json_file:
         city_to_city_pop = json.load(json_file)
     city_pop = city_to_city_pop[data["city"]]
+    
+    logger.error('city_to_pop done')
 
     time_category = get_tod(data["hour"])
+    logger.error('time_catagory_done')
+    
+    logger.error('All data is modified sucessfully')
 
     new_data = {
-        'hour_transaction': [time_category],
-        'category': [merchant_category],
+        #'hour_transaction': [time_category],
+        #'category': [merchant_category],
         'amt': [data["amount"]],
         'city': [data["city"]],
         'state': [data["state"]],
@@ -70,12 +80,14 @@ def preprocess(data,encoder,scaler,CATEGORICAL_FEATURES):
     # new_data = json.loads(new_data)
 
     # Convert JSON objects to DataFrame
+    logger.debug("Converting to DataFrame")
     df = pd.DataFrame(new_data)
 
     df[CATEGORICAL_FEATURES] = encoder.transform(df[CATEGORICAL_FEATURES])
     df_scaled = scaler.transform(df)
     df_scaled = pd.DataFrame(df_scaled)
 
+    logger.error("successfully executed preprocess function")
     return df_scaled
 
 
@@ -87,7 +99,7 @@ app = Flask(__name__)
 def infer():
     
     data = request.json 
-    logger.info(data)
+    logger.error({f'data : {data}'})
     
     # Ensure data is a dictionary and JSON serializable
     if not isinstance(dict(data), dict):
@@ -99,7 +111,7 @@ def infer():
         m_data = json.load(json_file)
         
     
-    logger.info(m_data)
+    logger.error(f'm_data : {m_data}')
 
     # Load the encoder and scaler using the paths stored in the JSON file
     with open(m_data['encoder_path'], 'rb') as f:
@@ -112,6 +124,8 @@ def infer():
         loaded_model = pickle.load(f)
 
     # Access the categorical features
+    logger.error('sucessfully loaded all files')
+    
     CATEGORICAL_FEATURES = m_data['categorical_features']
 
     # input_data = {
@@ -125,9 +139,13 @@ def infer():
     #     "hour" : 12
     # }
 
+    logger.error("calling preprocess function")
     preprocessed_data = preprocess(data=data,encoder=loaded_encoder,scaler=loaded_scaler,CATEGORICAL_FEATURES=CATEGORICAL_FEATURES)
 
+    logger.error("calling predict function")
+    #NO SUCH FUNCTION PREDICT in infer.py
     y_pred = loaded_model.predict(preprocessed_data)
+    logger.error('predict function completed')
 
     resp = ""
     if y_pred == 0:
@@ -136,12 +154,13 @@ def infer():
         resp = 'POTENTIAL FRAUD'
     
     #return resp
+    logger.error(f'{resp}')
     return jsonify({
         "result" : resp
     })
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5001)
 
 
 

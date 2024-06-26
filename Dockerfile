@@ -12,7 +12,9 @@ COPY xgboost_model.pkl /app/
 COPY model.py /app/
 COPY infer.py /app/
 
-RUN pip install -r requirements.txt
+EXPOSE 5000
+
+RUN pip install --no-cache-dir -r requirements.txt
 
 CMD ["python", "infer.py"]
 

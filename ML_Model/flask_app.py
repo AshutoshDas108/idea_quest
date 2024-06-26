@@ -10,7 +10,7 @@ app = Flask(__name__)
 def predict():
     data = request.json
     print(data)
-    logger.info('data : {data}')
+    logger.error(f'data : {data}')
     # Ensure data is a dictionary and JSON serializable
     if not isinstance(dict(data), dict):
         logger.error('JSON serialization error')
@@ -18,15 +18,19 @@ def predict():
 
     try:
         # Forward data to the machine learning model in the Docker container
-        logger.info('INSIDE TRY BLOCK')
+        logger.error('INSIDE TRY BLOCK')
         url = 'http://rpi_emulator:5001/predict'
+        #url = 'http://127.0.0.1:5000/predict'
+        logger.error(f'calling the {url}')
         response = requests.post(url, json=data)
-        logger.info(response)
-        print(response.json())
+        logger.error(f'got the response: {response}')
+        #response.raise_for_status() 
+        logger.error(f'{response.json()}')
         return response.json()
     
     except requests.exceptions.RequestException as e:
         logger.error('INSIDE EXCEPT BLOCK')
+        logger.error(f'Error : {str(e)}')
         return jsonify({"error in calling Model@5001": str(e)}), 500
 
 if __name__ == '__main__':
